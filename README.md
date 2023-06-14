@@ -21,20 +21,20 @@ Note that if emvc-2 is installed this way, it should be invoked with the command
 ```bash
 git clone https://github.com/guilledufort/EMVC-2.git
 ```
-
 ### Requirements
+
+Software requirements
+1. python ( >= 3.8.1 )
+2. samtools ( >= 1.9 )
 
 Compiler requirement
 1. gcc ( >= 4.8.1 )
 
 Python libraries requirement
-1. argparse==1.1
-2. pysam==0.20.0
-3. tqdm==1.4.1
-4. scipy==4.46.0
-
-Other software requirement
-1. samtools ( >= 1.9 )
+1. argparse ( == 1.1 )
+2. pysam ( == 0.20.0 )
+3. tqdm ( == 1.4.1 )
+4. scipy ( == 4.46.0 )
 
 ### Compiling the *candidate_variants_finder* 
 
@@ -115,9 +115,9 @@ optional arguments:
 
 
 ## Usage example
-We add an *example* folder with test files to run simple use examples the tool. For the example script to work, the hs37d5 reference file must be downloaded following the instructions detailed in the previous section.
+We add an *example* folder with a test file to run a simple example of the tool. The hs37d5 reference file must be downloaded following the instructions detailed in the previous section for the example to work.
 If installed using conda, use the command `emvc-2` instead of `python EMVC-2.py`.
-### Call SNV variants using EMVC-2
+
 To run the variant caller with 8 threads on the example file *example.bam*:
 ```bash
 cd EMVC-2

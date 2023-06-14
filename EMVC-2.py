@@ -32,7 +32,6 @@ import shutil
 import time
 import datetime
 import pickle
-from IPython import embed
 
 # Define a function to sort a bam file if it is not sorted and return the sorted file name
 def sort_bam(bam_file):
@@ -304,7 +303,7 @@ def main():
         print("\nStep 2- Filtering variants with the trained decision tree model...")
         # Run the filter_variants function for each tuple of arguments in parallel and get the results as a list of tuples
         filtered_data = list(tqdm.tqdm(pool.imap_unordered(filter_variants, args_list), total=len(args_list), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}"))
-        print("Done.\n")
+    
         # Close the pool and wait for the processes to finish
         pool.close()
         pool.join()
@@ -322,7 +321,6 @@ def main():
         for i in range(len(contigs)):
             for vcf_file in filtered_vcfs_files:
                 if "/{}_RF.vcf".format(contigs[i]) in vcf_file:
-                    print(vcf_file)
                     new_order_vcfs.append(vcf_file)
                     break
         
