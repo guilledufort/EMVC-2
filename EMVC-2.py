@@ -254,6 +254,12 @@ def main():
         print("Threads: " + str(args.threads))
         print("Output file: " + args.out_file + "\n")
 
+        # Check if the bam file is indexed
+        if not os.path.isfile(args.bam_file + ".bai"):
+            # Index the bam file
+            print("Indexing the bam file...")
+            pysam.index(args.bam_file)
+
         # Create a temporary folder in the bam_file directory to store the intermediate files
         temp_folder = os.path.join(os.path.dirname(args.bam_file), "tmp")
         os.makedirs(temp_folder, exist_ok=True)

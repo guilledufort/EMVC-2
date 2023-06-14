@@ -1,1 +1,168 @@
-# EMVC
+# EMVC-2
+## An efficient SNV variant caller based on the expectation maximization algorithm. EMVC-2 is implemented in C and uses a python wrapper.
+### Authors: Guillermo Dufort y Álvarez, Martí Xargay, Idoia Ochoa, and Alba Pages-Zamora
+### Contact: gdufort@fing.edu.uy
+
+## Install with Conda
+To install directly from source, follow the instructions in the next section.
+
+EMVC-2 is available on conda via the bioconda channel. See [this](https://bioconda.github.io/user/install.html) page for installation instructions for conda. Once conda is installed, do the following to install emvc-2.
+```bash
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+conda install emvc-2
+```
+Note that if emvc-2 is installed this way, it should be invoked with the command `emvc-2` rather than `./emvc-2`. The bioconda [help page](https://bioconda.github.io/user/install.html) shows the commands if you wish to install emvc-2 in an environment.
+
+## Install from source code
+
+### Download repository
+```bash
+git clone https://github.com/guilledufort/EMVC-2.git
+```
+
+### Compiler requirement
+0. gcc ( >= 4.8.1 )
+1. samtools ( >= 1.9 )
+
+### Python libraries requirement
+1. argparse
+2. os
+3. multiprocessing
+4. pysam
+5. shutil
+6. sys
+7. time
+8. datetime
+9. tqdm
+10. pickle
+11. scipy
+
+### Install 
+
+The following instructions will create the emvc-2 executable in the root directory.
+To compile emvc-2 you need to have the gcc compiler. 
+
+On Linux (Ubuntu or CentOS) gcc usually comes installed by default, but if not run the following:
+```bash
+sudo apt update
+sudo apt-get install gcc
+```
+
+On macOS, install GCC compiler:
+- Install HomeBrew (https://brew.sh/)
+- Install GCC (this step will be faster if Xcode command line tools are already installed using ```xcode-select --install```):
+```bash
+brew update
+brew install gcc@9
+```
+
+To check if the gcc compiler is properly installed in your system run:
+
+On Linux
+```bash
+gcc --version
+```
+On MacOS:
+```bash
+gcc-9 --version
+```
+The output should be the description of the installed software.
+
+To compile emvc-2 run:
+```bash
+cd EMVC-2/
+make
+```
+
+
+## Usage: 
+
+```console 
+
+python EMVC-2.py [-h] -i BAM_FILE -r REF_FILE [-p THREADS] [-t ITERATIONS] [-m LEARNERS] [-v VERBOSE] -o OUT_FILE
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i BAM_FILE, --bam_file BAM_FILE
+                        The bam file
+  -r REF_FILE, --ref_file REF_FILE
+                        The reference fasta file
+  -p THREADS, --threads THREADS
+                        The number of parallel threads (default 8)
+  -t ITERATIONS, --iterations ITERATIONS
+                        The number of EM iterations (default 5)
+  -m LEARNERS, --learners LEARNERS
+                        The number of learners (default 7)
+  -v VERBOSE, --verbose VERBOSE
+                        Make output verbose (default 0)
+  -o OUT_FILE, --out_file OUT_FILE
+                        The output file name
+
+```
+
+## Datasets information
+
+To test the SNV variant caller we ran experiments on the following datasets.
+
+| Dataset        | Reference | Size (GB) | Coverage | Sequencing Method     | Download link                                                                                                                                                       |
+|----------------|-----------|-----------|----------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ERR262997      | HG001     | 104       | 30       | Illumina HiSeq 2000   | [link](https://www.ebi.ac.uk/ena/browser/view/ERA207860?show=reads)                                                                                            |
+| NovaSeq        | HG001     | 49        | 25       | Illumina NovaSeq 6000 | is not available for download                                                                                                                                                                   |
+| Ashkenazim son | HG002     | 48        | 25       | Illumina HiSeq 2500   | [link](https://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/data/AshkenazimTrio/HG002_NA24385_son/10XGenomics)                                                          |
+| pangenomics2   | HG002     | 61        | 30       | Illumina HiSeq 2500   | [link](https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=NHGRI_UCSC_panel/HG002/hpp_HG002_NA24385_son_v1/ILMN/downsampled/)               |
+| pangenomics3   | HG003     | 66        | 30       | Illumina HiSeq 2500   | [link](https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=NHGRI_UCSC_panel/HG002/hpp_HG002_NA24385_son_v1/parents/ILMN/downsampled/HG003/) |
+| pangenomics4   | HG004     | 61        | 30       | Illumina HiSeq 2500   | [link](https://s3-us-west-2.amazonaws.com/human-pangenomics/index.html?prefix=NHGRI_UCSC_panel/HG002/hpp_HG002_NA24385_son_v1/parents/ILMN/downsampled/HG004/) |
+| Chinese Son    | HG005     | 34        | 15       | Illumina HiSeq 2500   | [link](https://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/data/ChineseTrio/HG005_NA24631_son/NIST_Stanford_Illumina_6kb_matepair/fastqs/)         
+
+
+### Downloading the datasets and the reference genomes
+
+To download a dataset you have to run the *download_script.sh* with the specific dataset name as a parameter.
+For example, to download *ERR262997* run:
+```bash
+cd EMVC-2/datasets
+./download_script.sh ERR262997
+```
+
+To download the human reference genome version hs37d5 run:
+```bash
+cd EMVC-2/reference
+./download_script.sh hs37d5
+```
+
+The scripts use the command *curl* to perform the download. 
+To install *curl* on macOS run:
+ ```bash
+brew install curl
+```
+To install *curl* on Ubuntu or CentOS run:
+ ```bash
+sudo apt-get install curl
+```
+
+## Alignment information
+
+To obtain alignment information in [BAM format](https://samtools.github.io/hts-specs/SAMv1.pdf) for each pair of FASTQ files we recommend using the tool [BWA](https://github.com/lh3/bwa).
+
+To install bwa with conda run:
+ ```bash
+conda install bwa
+```
+
+To align a pair of FASTQ files against a reference genome using BWA run:
+ ```bash
+bwa mem -t  [-@THREADS] [REF] [FASTQ_R1] [FASTQ_R2] \
+    | samtools sort [-@THREADS] -o [BAM_FILE] 
+```
+
+## Examples
+We add an *example* folder with test files to run simple use examples the tool. For the example script to work, the hs37d5 reference file must be downloaded following the instructions detailed in the previous section.
+If installed using conda, use the command `emvc-2` instead of `python EMVC-2.py`.
+### Call SNV variants using EMVC-2
+To run the variant caller with 8 threads on the example file *example.bam*:
+```bash
+cd EMVC-2
+python EMVC-2.py -i example/example.bam -r reference/hs37d5/hs37d5.fa.gz -p 8 -o example/example.vcf
+```
