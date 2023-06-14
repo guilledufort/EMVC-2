@@ -6,14 +6,14 @@
 ## Install with Conda
 To install directly from source, follow the instructions in the next section.
 
-EMVC-2 is available on conda via the bioconda channel. See [this](https://bioconda.github.io/user/install.html) page for installation instructions for conda. Once conda is installed, do the following to install emvc-2.
+EMVC-2 is available on conda via the bioconda channel. See [this](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) page for installation instructions for conda. Once conda is installed, do the following to install emvc-2.
 ```bash
 conda config --add channels defaults
 conda config --add channels bioconda
 conda config --add channels conda-forge
 conda install emvc-2
 ```
-Note that if emvc-2 is installed this way, it should be invoked with the command `emvc-2` rather than `./emvc-2`. The bioconda [help page](https://bioconda.github.io/user/install.html) shows the commands if you wish to install emvc-2 in an environment.
+Note that if emvc-2 is installed this way, it should be invoked with the command `emvc-2` rather than `./emvc-2`. The bioconda [help page](https://bioconda.github.io/tutorials/gcb2020.html#conda-environments) shows the commands if you wish to install emvc-2 in an environment.
 
 ## Install from source code
 
@@ -22,27 +22,24 @@ Note that if emvc-2 is installed this way, it should be invoked with the command
 git clone https://github.com/guilledufort/EMVC-2.git
 ```
 
-### Compiler requirement
-0. gcc ( >= 4.8.1 )
+### Requirements
+
+Compiler requirement
+1. gcc ( >= 4.8.1 )
+
+Python libraries requirement
+1. argparse==1.1
+2. pysam==0.20.0
+3. tqdm==1.4.1
+4. scipy==4.46.0
+
+Other software requirement
 1. samtools ( >= 1.9 )
 
-### Python libraries requirement
-1. argparse
-2. os
-3. multiprocessing
-4. pysam
-5. shutil
-6. sys
-7. time
-8. datetime
-9. tqdm
-10. pickle
-11. scipy
+### Compiling the *candidate_variants_finder* 
 
-### Install 
-
-The following instructions will create the emvc-2 executable in the root directory.
-To compile emvc-2 you need to have the gcc compiler. 
+The following instructions will create the *candidate_variants_finder* executable in the root directory, which is needed to run EMVC-2.
+To compile *candidate_variants_finder* you need to have the gcc compiler. 
 
 On Linux (Ubuntu or CentOS) gcc usually comes installed by default, but if not run the following:
 ```bash
@@ -70,14 +67,28 @@ gcc-9 --version
 ```
 The output should be the description of the installed software.
 
-To compile emvc-2 run:
+To compile *candidate_variants_finder* run:
 ```bash
 cd EMVC-2/
 make
 ```
+### Install python dependencies
 
+To install the *python dependencies* run:
+```bash
+cd EMVC-2/
+python setup.py install
+```
 
-## Usage: 
+### Install samtools
+
+To install *samtools*, you can use *conda*:
+```bash
+conda install -c bioconda samtools=1.9
+```
+or follow the instructions in [the github repository](https://github.com/samtools/samtools).
+
+## Usage
 
 ```console 
 
@@ -102,9 +113,20 @@ optional arguments:
 
 ```
 
-## Datasets information
 
-To test the SNV variant caller we ran experiments on the following datasets.
+## Usage example
+We add an *example* folder with test files to run simple use examples the tool. For the example script to work, the hs37d5 reference file must be downloaded following the instructions detailed in the previous section.
+If installed using conda, use the command `emvc-2` instead of `python EMVC-2.py`.
+### Call SNV variants using EMVC-2
+To run the variant caller with 8 threads on the example file *example.bam*:
+```bash
+cd EMVC-2
+python EMVC-2.py -i example/example.bam -r reference/hs37d5/hs37d5.fa.gz -p 8 -o example/example.vcf
+```
+
+## Original paper datasets information
+
+To test the performance of the EMVC-2 SNV variant caller we ran experiments on the following datasets.
 
 | Dataset        | Reference | Size (GB) | Coverage | Sequencing Method     | Download link                                                                                                                                                       |
 |----------------|-----------|-----------|----------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -117,7 +139,7 @@ To test the SNV variant caller we ran experiments on the following datasets.
 | Chinese Son    | HG005     | 34        | 15       | Illumina HiSeq 2500   | [link](https://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/data/ChineseTrio/HG005_NA24631_son/NIST_Stanford_Illumina_6kb_matepair/fastqs/)         
 
 
-### Downloading the datasets and the reference genomes
+### Downloading the datasets and the reference genome
 
 To download a dataset you have to run the *download_script.sh* with the specific dataset name as a parameter.
 For example, to download *ERR262997* run:
@@ -155,14 +177,4 @@ To align a pair of FASTQ files against a reference genome using BWA run:
  ```bash
 bwa mem -t  [-@THREADS] [REF] [FASTQ_R1] [FASTQ_R2] \
     | samtools sort [-@THREADS] -o [BAM_FILE] 
-```
-
-## Examples
-We add an *example* folder with test files to run simple use examples the tool. For the example script to work, the hs37d5 reference file must be downloaded following the instructions detailed in the previous section.
-If installed using conda, use the command `emvc-2` instead of `python EMVC-2.py`.
-### Call SNV variants using EMVC-2
-To run the variant caller with 8 threads on the example file *example.bam*:
-```bash
-cd EMVC-2
-python EMVC-2.py -i example/example.bam -r reference/hs37d5/hs37d5.fa.gz -p 8 -o example/example.vcf
 ```

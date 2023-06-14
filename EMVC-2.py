@@ -22,18 +22,17 @@
 
 
 # Import the necessary modules
-import argparse
+import argparse # 1.1
+import pysam # 0.20.0
+import scipy.stats as stats # 1.4.1
+import tqdm # 4.46.0
 import os
 import multiprocessing
-import pysam
 import shutil
-import sys
 import time
 import datetime
-import tqdm
 import pickle
-import scipy.stats as stats
-
+from IPython import embed
 
 # Define a function to sort a bam file if it is not sorted and return the sorted file name
 def sort_bam(bam_file):
@@ -62,7 +61,7 @@ def variant_call(args):
     # Get the path of the current script file
     script_path = os.path.abspath(__file__)
     # Get the path of the binary file
-    binary_path = os.path.join(os.path.dirname(script_path), 'emvc-2')
+    binary_path = os.path.join(os.path.dirname(script_path), 'candidate_variants_finder')
     # Replace the file names and parameters in the command with the corresponding variables
     command = f"samtools mpileup -B -C 0 -d 0 -f {ref_file} -Q 0 --ff 4,8,10,20,40,80,100,200,400,800 {bam_file} -r {contig} 2> /dev/null | {binary_path} - {out_name} {learners} {niterations} - - - - - - {verbose}"
     if verbose:
@@ -156,6 +155,11 @@ def filter_variants(args):
         line_o = o_vcf.readline()
    
     o_vcf.close()
+
+    # exit if there are no variants
+    if len(x) == 0:
+        return filtered_name, 0, 0
+    
     o_vcf = open(original_vcf, 'r')
 
     line_o = ""
@@ -298,14 +302,12 @@ def main():
 
         # Step 2: Filter variants using the trained model
         print("\nStep 2- Filtering variants with the trained decision tree model...")
-
         # Run the filter_variants function for each tuple of arguments in parallel and get the results as a list of tuples
         filtered_data = list(tqdm.tqdm(pool.imap_unordered(filter_variants, args_list), total=len(args_list), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}"))
-
+        print("Done.\n")
         # Close the pool and wait for the processes to finish
         pool.close()
         pool.join()
-
         # Total number of filtered variants
         total_filtered = 0
         total_kept = 0
@@ -315,6 +317,17 @@ def main():
             total_kept += kept
             filtered_vcfs_files.append(filtered_vcf)
 
+        new_order_vcfs = []
+        # Sort the filterted vcf files in the same order as the original contigs
+        for i in range(len(contigs)):
+            for vcf_file in filtered_vcfs_files:
+                if "/{}_RF.vcf".format(contigs[i]) in vcf_file:
+                    print(vcf_file)
+                    new_order_vcfs.append(vcf_file)
+                    break
+        
+        filtered_vcfs_files = new_order_vcfs
+        
         print("Total variants: {}, filtered: {}".format(total_kept, total_filtered))
 
         # Join the vcf files into one vcf file

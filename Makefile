@@ -11,10 +11,10 @@ else
 	CXX = gcc-9
 endif
 
-all: emvc
+all: candidate_variants_finder
 
-emvc: 
-		$(CXX) $(CFLAGS) $(INCLUDES) $(FILES) -o emvc-2
+candidate_variants_finder: 
+		$(CXX) $(CFLAGS) $(INCLUDES) $(FILES) -o candidate_variants_finder
 
 clean:
-		rm -f emvc-2 *.o
+		rm -f candidate_variants_finder *.o
