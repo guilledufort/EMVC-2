@@ -237,9 +237,13 @@ def main():
         if not os.path.isfile(args.ref_file):
             raise FileNotFoundError("The reference file does not exist.")
 
-        # Check if the output file already exists
-        if os.path.isfile(args.out_file):
-            raise FileExistsError("The output file already exists.")
+        # Check if samtools is installed
+        if not shutil.which("samtools"):
+            raise FileNotFoundError("Samtools is not installed. Try running 'conda install -c bioconda samtools'.")
+
+        # # Check if the output file already exists
+        # if os.path.isfile(args.out_file):
+        #     raise FileExistsError("The output file already exists.")
 
         # Start timer
         start = time.time()
@@ -290,7 +294,7 @@ def main():
         pool.close()
         pool.join()
 
-        model_name = "RF_depth5_test0.1_GT_DP_ALT_%_CLASS_Entropy_ERR174324_1_22_8_T5M7_41"
+        model_name = "RF_depth5_test0.01_GT_DP_ALT_%_CLASS_Entropy_ERR174324_1_22_41"
         clf = pickle.load(open("dt_model/{}.pkl".format(model_name), 'rb'))
         features = ["GT", "DP", "ALT_%", "CLASS_Entropy"]
 

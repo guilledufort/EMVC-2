@@ -11,6 +11,6 @@ setup(
         'pysam>=0.20.0',
         'scipy>=1.4.1',
         'tqdm>=4.46.0',
-        'scikit-learn>=0.22.1'
+        'scikit-learn=>0.22.1'
     ],
 )
