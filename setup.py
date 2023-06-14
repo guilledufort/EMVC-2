@@ -5,12 +5,12 @@ setup(
     version='1.0',
     packages=find_packages(),
     install_requires=[
-        'cython>=0.29.17',
-        'numpy>=1.18.1',
-        'argparse>=1.1',
-        'pysam>=0.20.0',
-        'scipy>=1.4.1',
-        'tqdm>=4.46.0',
-        'scikit-learn=>0.22.1'
+        'cython>=3.0.0',
+        'numpy>=1.25.0',
+        'argparse>=1.4.0',
+        'pysam>=0.21.0',
+        'scipy>=1.11.0',
+        'tqdm>=4.65.0',
+        'scikit-learn>=1.2.2'
     ],
 )
