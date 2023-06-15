@@ -360,7 +360,8 @@ def main():
         # Print the error message
         print("Error: {}".format(str(e)))
         # Remove the temporary folder and all its files
-        shutil.rmtree(temp_folder, ignore_errors=True)
+        if os.path.isdir(temp_folder):
+            shutil.rmtree(temp_folder, ignore_errors=True)
 
 if __name__ == "__main__":
     main()
