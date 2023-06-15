@@ -1,4 +1,8 @@
 from setuptools import setup, find_packages
+import subprocess
+
+# Run makefile
+subprocess.call(['make'])
 
 setup(
     name='EMVC-2',
