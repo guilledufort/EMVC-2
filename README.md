@@ -24,17 +24,20 @@ git clone https://github.com/guilledufort/EMVC-2.git
 ### Requirements
 
 Software requirements
-1. python ( >= 3.8.1 < 3.9 )
+1. python ( >= 3.8.1, <= 3.8.5 )
 2. samtools ( == 1.9 )
 
 Compiler requirement
 1. gcc ( >= 4.8.1 )
 
 Python libraries requirement
-1. argparse ( == 1.1 )
-2. pysam ( == 0.20.0 )
-3. tqdm ( == 1.4.1 )
-4. scipy ( == 4.46.0 )
+1. cython ( >=0.29.17 ),
+2. numpy ( >=1.16.6,<=1.20.3 ),
+3. argparse ( >=1.1 ),
+4. pysam ( >=0.15.4,<=0.16.0.1 ),
+5. scipy ( >=1.1.0,<1.5.4 ),
+6. tqdm ( >=4.46.0 ),
+7. scikit-learn ( >=0.22.2,<=0.24.2 ),
 
 ### Compiling the *candidate_variants_finder* 
 

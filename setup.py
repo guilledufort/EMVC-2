@@ -14,5 +14,3 @@ setup(
         'scikit-learn>=0.22.2,<=0.24.2',
     ],
 )
-# En lnano funciona 3.8 pero 3.9 da conflictos con samtools
-# En condor funciona 3.9 y no da conflicto con nada ,pero las nuevas versiones de los paquetes dan conflicto en 3.8. Espec'ificamente numpy.
