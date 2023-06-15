@@ -24,8 +24,8 @@ git clone https://github.com/guilledufort/EMVC-2.git
 ### Requirements
 
 Software requirements
-1. python ( >= 3.8.1 )
-2. samtools ( >= 1.9 )
+1. python ( >= 3.8.1 < 3.9 )
+2. samtools ( == 1.9 )
 
 Compiler requirement
 1. gcc ( >= 4.8.1 )
@@ -84,7 +84,7 @@ python setup.py install
 
 To install *samtools*, you can use *conda*:
 ```bash
-conda install -c bioconda samtools=1.9
+conda install -c bioconda samtools==1.9
 ```
 or follow the instructions in [the github repository](https://github.com/samtools/samtools).
 

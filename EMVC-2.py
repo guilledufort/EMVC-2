@@ -241,6 +241,9 @@ def main():
         if not shutil.which("samtools"):
             raise FileNotFoundError("Samtools is not installed. Try running 'conda install -c bioconda samtools'.")
 
+        # Check if the candidate_variants_finder file exists
+        if not os.path.isfile("candidate_variants_finder"):
+            raise FileNotFoundError("The candidate_variants_finder file does not exist. Try running 'make'.")
         # # Check if the output file already exists
         # if os.path.isfile(args.out_file):
         #     raise FileExistsError("The output file already exists.")
