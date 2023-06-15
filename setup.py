@@ -6,10 +6,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         'cython>=0.29.17',
-        'numpy>=1.21.6,<1.28.0',
+        'numpy>=1.16.6,<=1.20.3',
         'argparse>=1.1',
-        'pysam>=0.20.0',
-        'scipy>=1.1.0',
+        'pysam==0.20.0',
+        'scipy>=1.1.0,<1.5.4',
         'tqdm>=4.46.0',
         'scikit-learn>=1.2.1'
     ],
