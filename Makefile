@@ -8,7 +8,7 @@ INCLUDES=
 ifeq ($(OS_NAME),linux)
 	CXX = gcc
 else
-	CXX = gcc-9
+	CXX = gcc
 endif
 
 all: candidate_variants_finder

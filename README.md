@@ -28,7 +28,7 @@ Software requirements
 2. samtools ( == 1.9 )
 
 Compiler requirement
-1. gcc ( >= 4.8.1 )
+1. gcc ( Linux: >= 4.8.1, Mac: Apple clang version >= 14.0.0 )
 
 Python libraries requirement
 1. cython ( >=0.29.17 ),
@@ -55,7 +55,7 @@ On macOS, install GCC compiler:
 - Install GCC (this step will be faster if Xcode command line tools are already installed using ```xcode-select --install```):
 ```bash
 brew update
-brew install gcc@9
+brew install gcc
 ```
 
 To check if the gcc compiler is properly installed in your system run:
@@ -63,10 +63,6 @@ To check if the gcc compiler is properly installed in your system run:
 On Linux
 ```bash
 gcc --version
-```
-On MacOS:
-```bash
-gcc-9 --version
 ```
 The output should be the description of the installed software.
 

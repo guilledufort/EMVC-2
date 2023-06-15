@@ -832,7 +832,7 @@ int read_ground_truth(int *position, FILE *gt_file) {
     }
 
     // VCF files usually present a header providing information of the file in general, made up of several lines starting by "##". We shall skip this header
-    if ((line[0] == '#')) {  // If the first character of the line is '#'
+    if (line[0] == '#') {  // If the first character of the line is '#'
         return -1;
     }
 

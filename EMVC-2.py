@@ -23,7 +23,6 @@
 
 # Import the necessary modules
 import argparse # 1.1
-import pysam # 0.20.0
 import scipy.stats as stats # 1.4.1
 import tqdm # 4.46.0
 import os
@@ -32,23 +31,38 @@ import shutil
 import time
 import datetime
 import pickle
+import subprocess
+
+# Define a function to index a bam file
+def index_bam(bam_file):
+    # Index the bam file using samtools index
+    print("Indexing the bam file...")
+    subprocess.run(["samtools", "index", bam_file], check=True)
 
 # Define a function to sort a bam file if it is not sorted and return the sorted file name
 def sort_bam(bam_file):
     # Check if the bam file is sorted by checking the header
-    header = pysam.view("-H", bam_file)
+    header = subprocess.check_output(["samtools", "view", "-H", bam_file]).decode()
     # Check if the header contains both @HD and SO:coordinate in the same line
     if "@HD" in header and "SO:coordinate" in header.split("@HD")[1]:
-        # print("The bam file is already sorted.")
         # If sorted, return the original file name
         sorted_file = bam_file
     else:
-        # If not sorted, sort it using pysam.sort and save it as a new file with _sorted suffix
+        # If not sorted, sort it using samtools sort and save it as a new file with _sorted suffix
         print("Sorting the bam file...")
         sorted_file = bam_file.replace(".bam", "_sorted.bam")
-        pysam.sort("-o", sorted_file, bam_file)
+        subprocess.run(["samtools", "sort", "-o", sorted_file, bam_file], check=True)
     # Return the sorted file name
     return sorted_file
+
+# Define a function to get the contig names from the header of a bam file
+def get_contig_names(bam_file):
+    # Get the header of the bam file using samtools view -H and store it in a string
+    header = subprocess.check_output(["samtools", "view", "-H", bam_file]).decode()
+    # Extract the contig names from the header and store them in a list
+    contig_names = [line.split("\t")[1].split(":")[1] for line in header.split("\n") if line.startswith("@SQ")]
+    # Return the list of contig names
+    return contig_names
 
 # Define a function to call variants for a given contig using the system command
 def variant_call(args):
@@ -72,11 +86,9 @@ def variant_call(args):
 
 def features_from_line(line, features):
     line_s = line.split("\t")
-    # print (line_s)
     POS = int(line_s[1])
     QUAL = int(line_s[5])
     line_s_f = line_s[9].split(":")
-    # print (line_s_f)
     GT = int(line_s_f[0].split('/')[0] + line_s_f[0].split('/')[1])
     DP = int(line_s_f[1])
     FR = int(line_s_f[2])
@@ -244,9 +256,6 @@ def main():
         # Check if the candidate_variants_finder file exists
         if not os.path.isfile("candidate_variants_finder"):
             raise FileNotFoundError("The candidate_variants_finder file does not exist. Try running 'make'.")
-        # # Check if the output file already exists
-        # if os.path.isfile(args.out_file):
-        #     raise FileExistsError("The output file already exists.")
 
         # Start timer
         start = time.time()
@@ -267,8 +276,7 @@ def main():
         # Check if the bam file is indexed
         if not os.path.isfile(args.bam_file + ".bai"):
             # Index the bam file
-            print("Indexing the bam file...")
-            pysam.index(args.bam_file)
+            index_bam(args.bam_file)
 
         # Create a temporary folder in the bam_file directory to store the intermediate files
         temp_folder = os.path.join(os.path.dirname(args.bam_file), "tmp")
@@ -277,9 +285,8 @@ def main():
         # Sort the bam file if it is not sorted and get the sorted file name
         bam_file = sort_bam(args.bam_file)
 
-        # Get the contig names from the header of the bam file using pysam.AlignmentFile.header.references and store them in a list
-        bam = pysam.AlignmentFile(bam_file, "rb")
-        contigs = list(bam.header.references)
+        # Get the contig names from the bam file using samtools
+        contigs = get_contig_names(bam_file)
         # Print all contig names in one line
         print("Step 1- Finding candidate variants with the EM algorithm for {} contigs:".format(len(contigs)), ", ".join(contigs))
 
