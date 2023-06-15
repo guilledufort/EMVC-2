@@ -11,7 +11,7 @@ setup(
         'pysam>=0.15.4,<=0.16.0.1',
         'scipy>=1.1.0,<1.5.4',
         'tqdm>=4.46.0',
-        'scikit-learn>=1.2.1'
+        'scikit-learn>=0.22.2,<=0.24.2',
     ],
 )
 # En lnano funciona 3.8 pero 3.9 da conflictos con samtools
