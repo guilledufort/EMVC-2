@@ -153,7 +153,7 @@ def features_from_line(line, features):
     return x
 
 def filter_variants(args):
-    original_vcf, clf, features, filtered_name = args
+    original_vcf, clf, features, filtered_name, bypass_dt = args
     o_vcf = open(original_vcf, 'r')
     out_f = open(filtered_name, 'w')
     line_o = ""
@@ -189,7 +189,7 @@ def filter_variants(args):
     line_o = o_vcf.readline()
     
     while line_o:    
-        if preds[i] == 'TP':
+        if preds[i] == 'TP' or bypass_dt:
             out_f.write(line_o)
             variants_kept += 1
         else:
@@ -238,6 +238,7 @@ def main():
         parser.add_argument("-t", "--iterations", help="The number of EM iterations (default 5)", default=5, type=int)
         parser.add_argument("-m", "--learners", help="The number of learners (default 7)", default=7, type=int)
         parser.add_argument("-v", "--verbose", help="Make output verbose (default 0)", default=0, type=int)
+        parser.add_argument("-b", "--bypass_dt", help="Bypass Decision Tree filter (default False)", default=False, type=bool)
         parser.add_argument("-o", "--out_file", help="The output file name", required=True)
 
         # Parse the arguments
@@ -255,8 +256,8 @@ def main():
         if not shutil.which("samtools"):
             raise FileNotFoundError("Samtools is not installed. Try running 'conda install -c bioconda samtools'.")
 
-        # Check if the candidate_variants_finder file exists
-        if not os.path.isfile("candidate_variants_finder"):
+        # Check if the candidate_variants_finder file exists in the same directory as the script
+        if not os.path.isfile(os.path.dirname(os.path.realpath(__file__)) + "/candidate_variants_finder"):
             raise FileNotFoundError("The candidate_variants_finder file does not exist. Try running 'make'.")
 
         # Start timer
@@ -273,7 +274,8 @@ def main():
         print("BAM file: " + args.bam_file)
         print("Reference file: " + args.ref_file)
         print("Threads: " + str(args.threads))
-        print("Output file: " + args.out_file + "\n")
+        print("Output file: " + args.out_file)
+        print("Bypass Decision Tree filter: " + str(args.bypass_dt) + "\n")
 
         # Check if the bam file is indexed
         if not os.path.isfile(args.bam_file + ".bai"):
@@ -310,13 +312,16 @@ def main():
         clf = pickle.load(open("dt_model/{}.pkl".format(model_name), 'rb'))
         features = ["GT", "DP", "ALT_%", "CLASS_Entropy"]
 
-        args_list = [(vcf_file, clf, features, vcf_file[:-4] + "_RF.vcf") for vcf_file in vcf_files]
+        args_list = [(vcf_file, clf, features, vcf_file[:-4] + "_RF.vcf", args.bypass_dt) for vcf_file in vcf_files]
 
         # Create a multiprocessing pool with the number of threads
         pool = multiprocessing.Pool(args.threads)
 
         # Step 2: Filter variants using the trained model
-        print("\nStep 2- Filtering variants with the trained decision tree model...")
+        if not args.bypass_dt:
+            print("\nStep 2- Filtering variants with the trained decision tree model...")
+        else:
+            print("\nStep 2- Skipping filtering variants with the trained decision tree model...")
         # Run the filter_variants function for each tuple of arguments in parallel and get the results as a list of tuples
         filtered_data = list(tqdm.tqdm(pool.imap_unordered(filter_variants, args_list), total=len(args_list), bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}"))
     
