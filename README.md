@@ -3,7 +3,7 @@
 ### Authors: Guillermo Dufort y Álvarez, Martí Xargay, Idoia Ochoa, and Alba Pages-Zamora
 ### Contact: gdufort@fing.edu.uy
 
-## Install with Conda
+<!-- ## Install with Conda
 To install directly from source, follow the instructions in the next section.
 
 EMVC-2 is available on conda via the bioconda channel. See [this](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) page for installation instructions for conda. Once conda is installed, do the following to install emvc-2.
@@ -13,7 +13,7 @@ conda config --add channels bioconda
 conda config --add channels conda-forge
 conda install emvc-2
 ```
-Note that if emvc-2 is installed this way, it should be invoked with the command `emvc-2` rather than `./emvc-2`. The bioconda [help page](https://bioconda.github.io/tutorials/gcb2020.html#conda-environments) shows the commands if you wish to install emvc-2 in an environment.
+Note that if emvc-2 is installed this way, it should be invoked with the command `emvc-2` rather than `./emvc-2`. The bioconda [help page](https://bioconda.github.io/tutorials/gcb2020.html#conda-environments) shows the commands if you wish to install emvc-2 in an environment. -->
 
 ## Install from source code
 
@@ -39,9 +39,9 @@ Python libraries requirement
 6. tqdm ( >=4.46.0 ),
 7. scikit-learn ( >=0.22.2,<=0.24.2 ),
 
-### Compiling the *candidate_variants_finder* 
+### Compiling the *candidate_variants_finder* and installing python dependencies
 
-The following instructions will create the *candidate_variants_finder* executable in the root directory, which is needed to run EMVC-2.
+The following instructions will create the *candidate_variants_finder* executable in the root directory, which is needed to run EMVC-2, and install the required python dependencies.
 To compile *candidate_variants_finder* you need to have the gcc compiler. 
 
 On Linux (Ubuntu or CentOS) gcc usually comes installed by default, but if not run the following:
@@ -66,14 +66,7 @@ gcc --version
 ```
 The output should be the description of the installed software.
 
-To compile *candidate_variants_finder* run:
-```bash
-cd EMVC-2/
-make
-```
-### Install python dependencies
-
-To install the *python dependencies* run:
+To compile *candidate_variants_finder* and install the requiered python dependencies run:
 ```bash
 cd EMVC-2/
 python setup.py install
@@ -114,13 +107,13 @@ optional arguments:
 
 
 ## Usage example
-We add an *example* folder with a test file to run a simple example of the tool. The hs37d5 reference file must be downloaded following the instructions detailed in the previous section for the example to work.
-If installed using conda, use the command `emvc-2` instead of `python EMVC-2.py`.
+We add an *example* folder with a test file to run a simple example of the tool. The *hs37d5* reference file must be downloaded following the instructions detailed in the following section for the example to work.
+<!-- If installed using conda, use the command `emvc-2` instead of `python EMVC-2.py`. -->
 
 To run the variant caller with 8 threads on the example file *example.bam*:
 ```bash
 cd EMVC-2
-python EMVC-2.py -i example/example.bam -r reference/hs37d5/hs37d5.fa.gz -p 8 -o example/example.vcf
+./EMVC-2 -i example/example.bam -r reference/hs37d5/hs37d5.fa.gz -p 8 -o example/example.vcf
 ```
 
 ## Original paper datasets information
