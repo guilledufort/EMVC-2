@@ -113,7 +113,7 @@ We add an *example* folder with a test file to run a simple example of the tool.
 To run the variant caller with 8 threads on the example file *example.bam*:
 ```bash
 cd EMVC-2
-./EMVC-2 -i example/example.bam -r reference/hs37d5/hs37d5.fa.gz -p 8 -o example/example.vcf
+./emvc-2 -i example/example.bam -r reference/hs37d5/hs37d5.fa.gz -p 8 -o example/example.vcf
 ```
 
 ## Original paper datasets information
