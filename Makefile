@@ -1,7 +1,7 @@
 OS_NAME := $(shell uname -s | tr A-Z a-z)
 
 DEBUG_FLAGS = -pg
-CFLAGS = -std=c99 -O3 -march=native -fstrict-aliasing -ffast-math -fomit-frame-pointer -Wall -lm
+CFLAGS = -std=c99 -O3 -fstrict-aliasing -ffast-math -fomit-frame-pointer -Wall -lm
 FILES = src/EMVC_project.c src/EMVC_functions_project.c
 INCLUDES=
 
