@@ -3,17 +3,20 @@
 ### Authors: Guillermo Dufort y Álvarez, Martí Xargay, Idoia Ochoa, and Alba Pages-Zamora
 ### Contact: gdufort@fing.edu.uy
 
-<!-- ## Install with Conda
+## Install with Conda
 To install directly from source, follow the instructions in the next section.
 
-EMVC-2 is available on conda via the bioconda channel. See [this](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) page for installation instructions for conda. Once conda is installed, do the following to install emvc-2.
+EMVC-2 is available on conda via the bioconda channel. See [this](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) page for installation instructions for conda. Once conda is installed, we recommend creating an environment with python=3.8.1:
 ```bash
-conda config --add channels defaults
-conda config --add channels bioconda
-conda config --add channels conda-forge
-conda install emvc-2
+conda create --name emvcEnv python=3.8.1
+conda activate emvcEnv
 ```
-Note that if emvc-2 is installed this way, it should be invoked with the command `emvc-2` rather than `./emvc-2`. The bioconda [help page](https://bioconda.github.io/tutorials/gcb2020.html#conda-environments) shows the commands if you wish to install emvc-2 in an environment. -->
+
+Then run the following command to install emvc-2.
+```bash
+conda install -c bioconda emvc-2
+```
+Note that if emvc-2 is installed this way, it should be invoked with the command `emvc-2` rather than `./emvc-2`. The bioconda [help page](https://bioconda.github.io/tutorials/gcb2020.html#conda-environments) shows the commands if you wish to install emvc-2 in an environment.
 
 ## Install from source code
 
@@ -24,7 +27,7 @@ git clone https://github.com/guilledufort/EMVC-2.git
 ### Requirements
 
 Software requirements
-1. python ( >= 3.8.1, <= 3.8.5 )
+1. python ( == 3.8.1 )
 2. samtools ( == 1.9 )
 
 Compiler requirement
@@ -34,10 +37,9 @@ Python libraries requirement
 1. cython ( >=0.29.17 ),
 2. numpy ( >=1.16.6,<=1.20.3 ),
 3. argparse ( >=1.1 ),
-4. pysam ( >=0.15.4,<=0.16.0.1 ),
-5. scipy ( >=1.1.0,<1.5.4 ),
-6. tqdm ( >=4.46.0 ),
-7. scikit-learn ( >=0.22.2,<=0.24.2 ),
+4. scipy ( >=1.1.0,<1.5.4 ),
+5. tqdm ( >=4.46.0 ),
+6. scikit-learn ( >=0.22.2,<=0.24.2 ),
 
 ### Compiling the *candidate_variants_finder* and installing python dependencies
 
@@ -133,17 +135,17 @@ To test the performance of the EMVC-2 SNV variant caller we ran experiments on t
 
 ### Downloading the datasets and the reference genome
 
-To download a dataset you have to run the *download_script.sh* with the specific dataset name as a parameter.
+To download a dataset you have to run the *download_files.sh* with the specific dataset name as a parameter.
 For example, to download *ERR262997* run:
 ```bash
 cd EMVC-2/datasets
-./download_script.sh ERR262997
+./download_files.sh ERR262997
 ```
 
 To download the human reference genome version hs37d5 run:
 ```bash
 cd EMVC-2/reference
-./download_script.sh hs37d5
+./download_files.sh hs37d5
 ```
 
 The scripts use the command *curl* to perform the download. 
