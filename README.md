@@ -1,9 +1,11 @@
 # EMVC-2
 ## An efficient SNV variant caller based on the expectation maximization algorithm. EMVC-2 is implemented in C and uses a python wrapper.
-### Authors: Guillermo Dufort y Álvarez, Martí Xargay, Idoia Ochoa, and Alba Pages-Zamora
-### Contact: gdufort@fing.edu.uy
+### *Supported plataforms:* Linux, MacOS
+### *Authors:* Guillermo Dufort y Álvarez, Martí Xargay, Idoia Ochoa, and Alba Pages-Zamora
+### *Contact:* gdufort@fing.edu.uy
 
 ## Install with Conda
+
 To install directly from source, follow the instructions in the next section.
 
 EMVC-2 is available on conda via the bioconda channel. See [this](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) page for installation instructions for conda. Once conda is installed, we recommend creating an environment with python=3.8.1:
