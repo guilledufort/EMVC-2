@@ -88,7 +88,7 @@ or follow the instructions in [the github repository](https://github.com/samtool
 
 ```console 
 
-python EMVC-2.py [-h] -i BAM_FILE -r REF_FILE [-p THREADS] [-t ITERATIONS] [-m LEARNERS] [-v VERBOSE] -o OUT_FILE
+emvc-2 [-h] -i BAM_FILE -r REF_FILE [-p THREADS] [-t ITERATIONS] [-m LEARNERS] [-v VERBOSE] -o OUT_FILE
 
 optional arguments:
   -h, --help            show this help message and exit
